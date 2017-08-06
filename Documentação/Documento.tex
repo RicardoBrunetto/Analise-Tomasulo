@@ -1,0 +1,144 @@
+% Pacotes
+\input{Preambulo.tex}
+%Resumo
+\newcommand{\prof}{Prof. Anderson Faustino da Silva }
+\newcommand{\disc}{Arquitetura e Organização de Computadores II }
+\newcommand{\discnro}{6895 }
+
+%Começo do documento
+\begin{document}
+	\fontfamily{ptm} % usar fonte Times New Roman
+	\selectfont % ativar fonte escolhida na linha acima
+%	\mathversion{mymath} % ativa a versão matemática declarada, que no caso faz os
+	% números e as letras ficarem em Times New Roman
+	\begin{titlepage}
+\large
+\hspace{-3cm}
+\begin{tabular}{cc}
+\multirow{4}{*}{\includegraphics[scale=0.8]{logoUEM.png}} & \\
+& UNIVERSIDADE ESTADUAL DE
+MARINGÁ
+\\
+& CENTRO DE TECNOLOGIA - DEPARTAMENTO DE
+INFORMÁTICA \\
+& GRADUAÇÃO EM CIÊNCIA DA COMPUTAÇÃO
+\end{tabular}
+
+\vspace{2cm}
+
+\begin{center}
+\prof
+\end{center}
+
+\vspace{3cm}
+
+\begin{center}
+\discnro - \disc\\
+Segunda Prova
+\end{center}
+
+\vspace{4cm}
+
+\normalsize
+
+
+\begin{tabular}{p{10cm}l}
+Ricardo Henrique Brunetto & RA: 94182
+\end{tabular}
+
+\vspace{3cm}
+
+\begin{center}
+Maringá \\ Agosto - 2017
+\end{center}
+\end{titlepage}
+
+	%\tableofcontents
+	\thispagestyle{empty}
+	\newpage
+
+	\section*{Introdução}
+	\addcontentsline{toc}{section}{Introdução}
+
+	O presente documento contém as questões respondidas da segunda prova aplicada pelo \prof
+	na disciplina de \disc para a turma de Bacharelado em Ciência da Computação de 2015. Tal documento
+	fora desenvolvido unicamente e explicitamente para o propósito avaliativo.
+
+	O conteúdo aqui citado é advindo, além das anotações em aula e materiais disponibilizados pelo professor,
+	da gama de referências bibliográficas por ele recomendadas e encontradas pelo autor.
+
+	\pulalinha{1}
+
+	\section*{Questão 01}
+	\label{q1}
+	Para a resolução da questão foi desenvolvido um código em assembly para MIPS32 que realiza a
+	cópia de um subvetor em outro vetor. São argumentados à função \verb|copy| os seguintes dados:
+	\begin{itens}
+		\item \textbf{\$a0} - Endereço do primeiro vetor
+		\item \textbf{\$a1} - Endereço do segundo vetor
+		\item \textbf{\$a2} - Índice inicial
+		\item \textbf{\$a3} - Índice final
+	\end{itens}
+
+	O programa, então, copiará os elementos entre, e inclusive, \verb|$a2| e \verb|$a3| do vetor cujo endereço
+	inicial está em \verb|$a0| para o vetor cujo endereço inicial está em \verb|$a1|. O detalhamento do código
+	será omitido aqui, uma vez que o mesmo o faz com comentários.
+
+	\pulalinha{1}
+	\newpage
+	\begin{center}
+	\lstinputlisting{../assembly.s}
+	\end{center}
+
+	\section*{Questão 02}
+	\label{q2}
+	Para tal questão, serão propostas convenções a respeito de detalhes da execução do algoritmo
+	por um simulador hipotético que aplica o algoritmo de Tomasulo com especulação. Convenciona-se o seguinte:
+	\begin{itens}
+		\item O algoritmo de predição de desvios acerta todas as previsões de desvios.
+		\item São emitidas, por ciclo, quantas instruções as estações de reserva comportarem, respeitando às seguintes restrições:
+			\subitem Política de emissão \textit{In-Order Issue and Out-of-Order Completion}, o que implica que a emissão respeitará a fila de instruções;
+			\subitem Conflitos de Recursos, onde a emissão cessará;
+			\subitem A execução (despacho para a Unidade Funcional) se iniciará apenas quando não houver mais dependências;
+		\item A quantidade de ciclos de cada instrução do código obedece ao especificado pela arquitetura MIPS32.
+	\end{itens}
+
+	A cada ciclo passado, informar-se-á quais instruções foram despachadas (inciaram a execução, de fato).
+
+	\newlength\q
+	\setlength\q{\dimexpr .5\textwidth -2\tabcolsep}
+
+	\begin{table}[h]
+		\centering
+		\caption{My caption}
+		\label{my-label}
+		\begin{tabular}{|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|}
+			\hline
+			\textbf{ER}     & \textbf{Busy} & \textbf{Op} & \textbf{Qj} & \textbf{Vj} & \textbf{Qk} & \multicolumn{1}{c|}{\textbf{Vk}} & \multicolumn{1}{c|}{\textbf{A}} \\ \hline
+			\textit{add1}   &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{add2}   &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{add3}   &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{mul1}   &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{mul2}   &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{load1}  &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{load2}  &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{load3}  &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{load4}  &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{load5}  &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{store1} &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{store2} &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{store3} &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{store4} &               &             &             &             &             &                                  &                                 \\ \hline
+			\textit{store5} &               &             &             &             &             &                                  &                                 \\ \hline
+		\end{tabular}
+	\end{table}
+
+	\newpage
+	\section*{Referências}
+	\addcontentsline{toc}{section}{Referências}
+	\flushleft
+
+		\bibliography{referencias}
+
+
+\end{document}

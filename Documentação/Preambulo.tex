@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+
+\usepackage{cmap} %impedir ligadura de fi, fl
+\usepackage[T1]{fontenc} % reconhecer acentos
+\usepackage[ansinew]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{color}
+\usepackage{graphics,graphicx}
+\usepackage{subfigure} % pra inserir várias figuras no mesmo ambiente
+\usepackage{longtable} % para inserir tabelas extensas sem serem quebradas
+\usepackage{multirow} % pra permitir mescla de linhas na tabela
+%\usepackage{helvet} 			%fonte Helvetica
+%\renewcommand{\familydefault}{\sfdefault}				%definir fonte sem serifa como
+% padrão
+
+%Referências
+\usepackage[comma]{natbib}   % omit 'round' option if you prefer square brackets
+\bibliographystyle{plainnat}
+% - citet => Author (year)		|		- citeauthor => Author
+
+% Margem e espa�amento
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\renewcommand{\baselinestretch}{1.5}   % espa�amento entre linhas
+\setlength{\parskip}{0.2\baselineskip} % espa�amento entre par�grafos
+\usepackage{indentfirst} % indentar o primeiro par�grafo das se��es
+\setlength{\parindent}{1.5cm} % tamanho da indenta��o de par�grafo
+\usepackage{setspace} % permite comandos de espa�amento entre linhas
+
+%Cabe�alho e rodap�
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[LE, LO, RE, RO]{}
+\fancyfoot[CO, CE]{}
+\fancyfoot[RO, RE]{\thepage}
+
+%Novos Ambientes
+\newenvironment{itens}{\begin{itemize}\nospaceitem}{\end{itemize}}
+\newsavebox{\mybox}
+\newenvironment{m_box}
+{\begin{lrbox}{\mybox}\begin{minipage}{0.9\textwidth}}
+{\end{minipage}\end{lrbox}\fbox{\usebox{\mybox}}}
+
+\newcommand\notes[1]{%
+\fbox{\begin{minipage}{0.9\textwidth}#1\end{minipage}}}
+\newcommand{\minitem}[1]{\subitem {\small $\circ$ #1}}
+\newcommand{\nospaceitem}{\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}}
+\newcommand{\pulalinha}[1]{\vspace{#1\baselineskip}}
+
+% Para printar código em assembly MIPS32
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\usepackage{listings} % needed for the inclusion of source code
+\usepackage{mips}
+
+\lstset{ %
+  language=[mips]Assembler,       % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+% this is needed for forms and links within the text
+\usepackage{hyperref}
