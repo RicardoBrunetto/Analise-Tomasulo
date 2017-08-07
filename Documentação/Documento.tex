@@ -201,6 +201,17 @@ Maringá \\ Agosto - 2017
 	onde $L_{variavel}$ indica a Linha da Cache em que a $variavel$ está armazenada.
 
 	\subsection*{Protocolo MSI}
+	Para tal protocolo, tem-se:
+	\begin{itens}
+		\item \textbf{Vantagens}
+			\subitem Custo e complexidade baixos.
+			\subitem Alto desempenho.
+		\item \textbf{Desvantagens}
+			\subitem Alto tráfego no baramento causado por leituras seguidas de escritas gerando duas requisições externas seguidas.
+			\subitem Alto tráfego no baramento e alto custo causado pelo \textit{flush} (\textit{write-back}) de blocos que são lidos por outras caches.
+	\end{itens}
+
+	Aplicação do protocolo:
 	\begin{center}
 		\begin{tabular}{|p{\mylength}|p{\mylength}|}
 			\hline
@@ -221,6 +232,19 @@ Maringá \\ Agosto - 2017
 	\end{center}
 
 	\subsection*{Protocolo MESI}
+	Para tal protocolo, tem-se:
+	\begin{itens}
+		\item \textbf{Vantagens}
+			\subitem Custo e complexidade relativamente baixos.
+			\subitem Soluciona o problema do alto tráfego no baramento causado por leituras seguidas de escritas gerando duas requisições externas seguidas. ISso porque se o Controlador
+			da Cache necessitar modificar uma linha de cache que está no estado exclusivo, nenhuma comunicação via barramento é necessitada.
+		\item \textbf{Desvantagens}
+			\subitem Mantém o problema de alto tráfego no baramento e alto custo causado pelo \textit{flush} (\textit{write-back}) de blocos que são lidos por outras caches.
+			\subitem Torna o estado compartilhado "impreciso", uma vez que caso uma linha esteja no estado compartilhado e, posteriormente, os demais Controladores de Cache a removam
+			de suas respectivas caches, então aquele dado será único no sistema, mas não será promovido.
+	\end{itens}
+
+	Aplicação do protocolo:
 	\begin{center}
 		\begin{tabular}{|p{\mylength}|p{\mylength}|}
 			\hline
@@ -241,6 +265,18 @@ Maringá \\ Agosto - 2017
 	\end{center}
 
 	\subsection*{Protocolo MOESI}
+	Para tal protocolo, tem-se:
+	\begin{itens}
+		\item \textbf{Vantagens}
+			\subitem Não há alto tráfego no baramento causado por leituras seguidas de escritas gerando duas requisições externas seguidas.
+			\subitem Não há alto tráfego no baramento e alto custo causado pelo \textit{flush} (\textit{write-back}) de blocos que são lidos por outras caches.
+			\subitem Fornece melhor desempenho em multiprocessadores.
+		\item \textbf{Desvantagens}
+			\subitem Alta complexidade.
+			\subitem Incorpora o conceito de linha suja na cache.
+	\end{itens}
+
+	Aplicação do protocolo:
 	\begin{center}
 		\begin{tabular}{|p{\mylength}|p{\mylength}|}
 			\hline
@@ -266,12 +302,12 @@ Maringá \\ Agosto - 2017
 	A implementação de uma Barreira ocorre via um \textbf{Contador}. No entanto, incrementa-se uma variável compartilhada e, portanto, tal incremento deve ser \textbf{atômico}.
 	É importante considerar que, em MIPS32, os parâmetros são enviados pelos registradores (inciando de \$a0). O código desenvolvido é o exposto abaixo:
 
+	\newpage
 	\begin{center}
 		\lstinputlisting{../barreira.s}
 	\end{center}
 
 	\newpage
-		\section*{Referências}
 	\addcontentsline{toc}{section}{Referências}
 	\flushleft
 

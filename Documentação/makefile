@@ -1,11 +1,11 @@
-all: clear_windows
+all: clear
 	@echo "\n\tSucesso!\n"
 
 compile:
 	@pdflatex --interaction=batchmode Documento
-	# @bibtex Documento
-	# @pdflatex Documento
-	# @pdflatex Documento
+	@bibtex Documento
+	@pdflatex --interaction=batchmode Documento
+	@pdflatex --interaction=batchmode Documento
 
 clear: compile
 	@rm -f *.synctex.gz
@@ -14,15 +14,3 @@ clear: compile
 	@rm -f *.out
 	@rm -f *.blg
 	@rm -f *.bbl
-
-windows:
-	@"C:\Program Files\MiKTeX 2.9\miktex\bin\x64\pdflatex" -synctex=1 -interaction=batchmode Documento.tex
-	@"C:\Program Files\MiKTeX 2.9\miktex\bin\x64\bibtex" Documento.tex
-
-clear_windows: windows
-	@del *.synctex.gz
-	@del *.aux
-	@del *.log
-	@del *.out
-	@del *.blg
-	@del *.bbl
