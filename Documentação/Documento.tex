@@ -65,7 +65,9 @@ Maringá \\ Agosto - 2017
 	fora desenvolvido unicamente e explicitamente para o propósito avaliativo.
 
 	O conteúdo aqui citado é advindo, além das anotações em aula e materiais disponibilizados pelo professor,
-	da gama de referências bibliográficas por ele recomendadas e encontradas pelo autor.
+	da gama de referências bibliográficas por ele recomendadas e encontradas pelo autor. Recomenda-se
+	\citeauthor{Monteiro}, \citeauthor{Tanenbaum} e \citeauthor{Stallings} em caso de dúvidas quanto à
+	nomenclatura utilizada.
 
 	\pulalinha{1}
 
@@ -87,7 +89,7 @@ Maringá \\ Agosto - 2017
 	\pulalinha{1}
 	\newpage
 	\begin{center}
-	\lstinputlisting{../assembly.s}
+	\lstinputlisting{../copiar_subvetor.s}
 	\end{center}
 
 	\section*{Questão 02}
@@ -96,49 +98,189 @@ Maringá \\ Agosto - 2017
 	por um simulador hipotético que aplica o algoritmo de Tomasulo com especulação. Convenciona-se o seguinte:
 	\begin{itens}
 		\item O algoritmo de predição de desvios acerta todas as previsões de desvios.
-		\item São emitidas, por ciclo, quantas instruções as estações de reserva comportarem, respeitando às seguintes restrições:
+		\item São emitidas, por ciclo, quantas instruções as Estações de Reserva comportarem, respeitando às seguintes restrições:
 			\subitem Política de emissão \textit{In-Order Issue and Out-of-Order Completion}, o que implica que a emissão respeitará a fila de instruções;
 			\subitem Conflitos de Recursos, onde a emissão cessará;
-			\subitem A execução (despacho para a Unidade Funcional) se iniciará apenas quando não houver mais dependências;
-		\item A quantidade de ciclos de cada instrução do código obedece ao especificado pela arquitetura MIPS32.
+			\subitem A execução (despacho para a Unidade Funcional) se iniciará apenas quando não houver mais dependências verdadeiras.
+		\item A quantidade de ciclos de cada instrução do código obedece ao especificado pela arquitetura MIPS32, a saber:
+			\subitem \verb|add|, \verb|sub|, \verb|addi|, \verb|addiu| e \verb|li| custam 2 ciclos de clock;
+			\subitem \verb|lw| e \verb|sw| custam 4 ciclos de clock;
+			\subitem \verb|bgez| custa 2 ciclos de clock;
+			\subitem \verb|mul| custa 5 ciclos de clock.
+		\item A chamada de sistema (\verb|syscall|) para pôr fim à execução aguarda até que todas as outras Estações de Reserva tenham finalizado o processamento.
+		\item Quanto às Estações de Reserva (cada qual com uma única Unidade Funcional acoplada):
+			\subitem 3 Estações de Reserva para operações lógicas e aritméticas;
+			\subitem 2 Estações de Reserva para operações de multiplicação e divisão;
+			\subitem 5 Estações de Reserva para carregamento de dados (\textit{load});
+			\subitem 5 Estações de Reserva para armazenamento de dados (\textit{store}).
 	\end{itens}
 
-	A cada ciclo passado, informar-se-á quais instruções foram despachadas (inciaram a execução, de fato).
+	A cada ciclo passado, informar-se-á quais instruções foram despachadas (inciaram a execução, de fato) e quais estão executando
+	naquele ciclo, através do índice (nome) da Estação de Reserva que a comporta. Além disso, serão omitidos registradores não-utilizados
+	do Banco de Registradores. A nomenclatura dos campos das Estações de Reserva e do Banco de Registradores obecede à estabelecida por \cite{Hennessy}.
 
-	\newlength\q
-	\setlength\q{\dimexpr .5\textwidth -2\tabcolsep}
+	Supõe-se a execução do código da Questão 01 com os seguintes parâmetros:
+	\begin{itens}
+		\item \textbf{\$a0} = \&src (Endereço do primeiro vetor)
+		\item \textbf{\$a1} = \&dst (Endereço do segundo vetor)
+		\item \textbf{\$a2} = 1 (Índice inicial)
+		\item \textbf{\$a3} = 3 (Índice final)
+	\end{itens}
+	onde \verb|src = {45, 23, 12, 29, 10}| e \verb|dst = {0, 0, 0, 14, 23}|.
 
-	\begin{table}[h]
-		\centering
-		\caption{My caption}
-		\label{my-label}
-		\begin{tabular}{|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|}
+	Dessa forma, a execução deve resultar em \verb|dst = {23, 12, 29, 14, 23}|. A execução passo-a-passo encontra-se nos Apêndices deste documento.\footnote{Os filetes preenchidos de cor mais escura
+	denotam que, no ciclo em questão, não houve nenhuma emissão e nenhuma alteração no vetor de destino.}
+
+	\section*{Questão 03}
+	Para tal, utilizar-se-á da prova por meio da demonstração da quantidade de ciclos de clock.
+
+	Percebe-se que executar o algoritmo da Questão 01 em um pipeline escalar sem a especulação não garante a prova formal de tal afirmação, uma vez que utilizar-se-ía de
+	um exemplo em particular na tentativa de demonstrar uma propriedade global, de modo que não se pode garantir a generalização, ainda que intuitivamente isso
+	seja evidenciado.
+
+	Supõe-se $k$ o número de ciclos necessários para executar um determinado algoritmo com as especificações de simulação da Questão 02 (Tomasulo com especulação). Dessa forma, para o caso específico tratado na
+	Questão 02 (parâmetros dados) e envolvendo o algoritmo da Questão 01, por exemplo, tem-se $k = 23$.
+
+	Seja $c$ a quantidade máxima de ciclos necessária para se resolver a condição de qualquer desvio implementado pela arquitetura em questão (sem especificamente tratar da
+	MIPS32, onde $c = 2$). É importante salientar que, em todos os casos, as comparações são dadas entre os desempenhos supondo entradas idênticas
+	para ambas as configurações de simulação (com especulação e sem especulação). Note que, $c$ pode variar muito além, na prática, por limitações da \textit{ILP}, como \textbf{dependências verdadeiras}.
+	No entanto, ambas as configurações consideradas estão sujeitas à tal variação e, portanto, ela \textbf{não} será considerada na análise a seguir.
+
+	Nota-se que, ao seguir a política de emissão \textit{In-Order Issue and Out-of-Order Completion} sem a implementação de algoritmos de predição de desvios ou de execução especulativa,
+	deve-se \textbf{cessar a emissão} a cada vez que um desvio condicional for emitido. Isso porque o Processador não tem mecanismos para controlar as emissões enquanto não houver o cômputo
+	da condição.
+
+	Seja $x$ o número de desvios condicionais espalhados pelo código que devem ser executados pelo Processador. Dessa forma, ter-se-á, ao menos $x \times c$ ciclos de clock em que as emissões serão
+	suspendidas. Logicamente, estes $x \times c$ ciclos de clock estão contidos nos $k$ ciclos totais de uma configuração com especulação, visto que, de qualquer forma, as condições dos desvios devem ser computadas.
+	No entanto, durante estes ciclos em que as condições estão sendo computadas \textbf{podem} haver outras instruções na Fila de Instruções com condições necessárias atendidas para serem emitidas. Assim,
+	a eficiência da especulação se dá pelas instruções que se emite e computa enquanto a condição do desvio está sendo calculada (quando possível, visto que há casos de limitação de recursos em que não se pode
+	realizar emissões ou execuções).
+
+	No melhor caso, o algoritmo de predição terá acertado e as instruções que foram processadas enquanto a condição não havia sido completa deveriam, de fato, ter sido executadas e não perdeu-se $c$ ciclos
+	aguardando para enviar as instruções à execução (evitou-se um \textit{stall} de $c$ ciclos no pipeline). Por outro lado, no pior caso, o algoritmo de predição de desvios terá feito uma suposição errada
+	quanto à tomada do salto e o processamento das outras instruções, realizado durante os $c$ ciclos que a condição levou, terá sido "despediçado", visto que elas não serão efetivadas. No entanto, caso não
+	houvesse especulação, estes $c$ ciclos teriam, de fato, servido \textbf{apenas} para o cálculo da condição (desconsiderando o que já estava em execução na emissão do desvio).
+
+	Assim, no pior dos casos da execução especulativa, tem-se o mesmo caso da execução sem especulação (com \textit{stall} no pipeline). Isso implica que:
+	$$k \leq k + (x \times c)\;\forall x, c \geq 0$$
+
+	Para fins de exemplo, assume-se que deseja-se executar a mesma sequência de código da Questão 01 (\verb|copiar_subvetor|) em uma máquina onde não haja implementação de especulação, bem
+	como nenhum algoritmo de predição de desvios.
+	Nesse caso, para a máquina sem predição, como foi suposto, ter-se-ia de cessar a emissão a cada emissão da instrução \verb|bgez| do código \verb|copiar_subvetor|, na arquitetura MIPS32.
+	Como \verb|bgez| é emitido 3 vezes e o processamento de sua condição se dá em 2 ciclos, haveria, ao menos 6 ciclos onde nenhuma instrução é emitida. Isso implica que o total de ciclos para
+	a execução do algoritmo seria \textbf{em torno de}\footnote{Isso se deve ao fato de que uma emissão tardia poderia evitar dependências verdadeiras com instruções que já estão em execução, ou, ainda
+	causá-las em consequência de não terem ainda saído do pipeline (efeito cascata).} $29$ ciclos. No entanto, o mínimo seria de $26$ ciclos.
+
+	\section*{Questão 04}
+	Para tal questão, propõe-se dois códigos a serem executados em paralelo. Tais códigos manipulam as variáveis globais inteiras \verb|a|, \verb|b| e \verb|c|.
+
+	\pulalinha{1}
+	\begin{tabular}{p{\mylength}p{\mylength}}
+		\centering \begin{query}\lstinputlisting[language=c]{../paralelo_1.c}\end{query} & \centering \begin{query}\lstinputlisting[language=c]{../paralelo_2.c}\end{query} \\
+	\end{tabular}
+
+	As funções \verb|read| e \verb|write| implicam em uma leitura e uma escrita, respectivamente, da variável passada como parâmetro. Tal função exemplifica,
+	de maneira abstrata, uma leitura de um valor da memória e sua correspondente escrita.
+
+	Dessa forma, aplicar-se-á os Protocolos de Coerência de Cache de Invalidação de Dados \textbf{MSI}, \textbf{MESI} e \textbf{MOESI}. Para todos os casos,
+	supõe-se que as três variáveis encontram-se em \textbf{linhas diferentes} da Cache. No decorrer da execução, supõe-se que cada um dos fluxos é executado
+	por um processador diferente ($P_0$ executará \verb|paralelo_1| enquanto $P_1$ executará \verb|paralelo_2|).
+	Serão desprezados efeitos externos de outras questões de projeto no que tange ao Paralelismo à Nível de Fluxo (\textit{Thread Level Parallelism - TLP}),
+	bem como efeitos internos de questões relativas ao Paralelismo à Nível de Instrução (\textit{Instruction Level Parallelism - ILP}), uma vez que há interesse
+	apenas no comportamento dos Controladores de Cache em relação ao protocolo (e às requisições).
+
+	Para todos os protocolos, a execução é realizada em \textbf{passos} (ou momentos), de modo que não se considera a unidade de tempo em ciclos de clock.
+	Isso serve para simplificar a execução e abstrair detalhes não relevantes à aplicação do protocolo em questão. Cada passo possui um \textbf{indicador} para explicitar
+	a ordem em que tais requisições ocorreram (ex: 2.1 significa que tal requisição foi a primeira a ocorrer no passo 2), visto que uma requisição interna do Processadodr
+	pode gerar uma requisição externa para outro Controlador de Cache (que, no caso, seria denotado por 2.2).
+
+	Quanto à notação, utiliza-se a seguinte:
+	\begin{center}
+		[Passo.Indicador]: requisição | Estado\_Antigo $\rightarrow$ Estado\_Novo | $L_{variavel}$
+	\end{center}
+	onde $L_{variavel}$ indica a Linha da Cache em que a $variavel$ está armazenada.
+
+	\subsection*{Protocolo MSI}
+	\begin{center}
+		\begin{tabular}{|p{\mylength}|p{\mylength}|}
 			\hline
-			\textbf{ER}     & \textbf{Busy} & \textbf{Op} & \textbf{Qj} & \textbf{Vj} & \textbf{Qk} & \multicolumn{1}{c|}{\textbf{Vk}} & \multicolumn{1}{c|}{\textbf{A}} \\ \hline
-			\textit{add1}   &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{add2}   &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{add3}   &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{mul1}   &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{mul2}   &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{load1}  &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{load2}  &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{load3}  &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{load4}  &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{load5}  &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{store1} &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{store2} &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{store3} &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{store4} &               &             &             &             &             &                                  &                                 \\ \hline
-			\textit{store5} &               &             &             &             &             &                                  &                                 \\ \hline
+			$\mathbf{P_0}$ (\verb|paralelo_1|) & $\mathbf{P_1}$ (\verb|paralelo_2|) \\ \hline
+			\req{1.1}{\cwm}{I}{M}{b} &  \\ \hline
+			& \req{2.1}{\crm}{I}{S}{a} \\ \hline
+			\req{3.1}{\crm}{I}{S}{a} & \req{3.2}{\crr}{S}{S}{a} \\ \hline
+			& \req{4.1}{\cwm}{I}{M}{c} \\ \hline
+			\req{5.1}{\cwm}{I}{M}{c} & \req{5.2}{\crw}{M}{I}{c} \\ \hline
+			\req{6.2}{\crr}{M}{S}{c} & \req{6.1}{\crm}{I}{S}{c} \\ \hline
+			\req{7.1}{\cwh}{S}{M}{a} & \req{7.2}{\crw}{S}{I}{a} \\ \hline
+			\req{8.2}{\crr}{M}{S}{b} & \req{8.1}{\crm}{I}{S}{b} \\ \hline
+			\req{9.1}{\crh}{S}{S}{b} & \\ \hline
+			\req{10.2}{\crw}{M}{I}{a} & \req{10.1}{\cwm}{I}{M}{a} \\ \hline
+			\req{11.1}{\crm}{I}{S}{a} & \req{11.2}{\crr}{M}{S}{a} \\ \hline
+			\req{12.2}{\crw}{S}{I}{b} & \req{12.1}{\cwh}{S}{M}{b} \\ \hline
 		\end{tabular}
-	\end{table}
+	\end{center}
+
+	\subsection*{Protocolo MESI}
+	\begin{center}
+		\begin{tabular}{|p{\mylength}|p{\mylength}|}
+			\hline
+			$\mathbf{P_0}$ (\verb|paralelo_1|) & $\mathbf{P_1}$ (\verb|paralelo_2|) \\ \hline
+			\req{1.1}{\cwm}{I}{M}{b} &  \\ \hline
+			& \req{2.1}{\crm}{I}{E}{a} \\ \hline
+			\req{3.1}{\crm}{I}{S}{a} & \req{3.2}{\crr}{E}{S}{a} \\ \hline
+			& \req{4.1}{\cwm}{I}{M}{c} \\ \hline
+			\req{5.1}{\cwm}{I}{M}{c} & \req{5.2}{\crw}{M}{I}{c} \\ \hline
+			\req{6.2}{\crr}{M}{S}{c} & \req{6.1}{\crm}{I}{S}{c} \\ \hline
+			\req{7.1}{\cwh}{S}{M}{a} & \req{7.2}{\crw}{S}{I}{a} \\ \hline
+			\req{8.2}{\crr}{M}{S}{b} & \req{8.1}{\crm}{I}{S}{b} \\ \hline
+			\req{9.1}{\crh}{S}{S}{b} & \\ \hline
+			\req{10.2}{\crw}{M}{I}{a} & \req{10.1}{\cwm}{I}{M}{a} \\ \hline
+			\req{11.1}{\crm}{I}{S}{a} & \req{11.2}{\crr}{M}{S}{a} \\ \hline
+			\req{12.2}{\crw}{S}{I}{b} & \req{12.1}{\cwh}{S}{M}{b} \\ \hline
+		\end{tabular}
+	\end{center}
+
+	\subsection*{Protocolo MOESI}
+	\begin{center}
+		\begin{tabular}{|p{\mylength}|p{\mylength}|}
+			\hline
+			$\mathbf{P_0}$ (\verb|paralelo_1|) & $\mathbf{P_1}$ (\verb|paralelo_2|) \\ \hline
+			\req{1.1}{\cwm}{I}{M}{b} &  \\ \hline
+			& \req{2.1}{\crm}{I}{E}{a} \\ \hline
+			\req{3.1}{\crm}{I}{S}{a} & \req{3.2}{\crr}{E}{S}{a} \\ \hline
+			& \req{4.1}{\cwm}{I}{M}{c} \\ \hline
+			\req{5.1}{\cwm}{I}{M}{c} & \req{5.2}{\crw}{M}{I}{c} \\ \hline
+			\req{6.2}{\crr}{M}{O}{c} & \req{6.1}{\crm}{I}{S}{c} \\ \hline
+			\req{7.1}{\cwh}{S}{M}{a} & \req{7.2}{\crw}{S}{I}{a} \\ \hline
+			\req{8.2}{\crr}{M}{O}{b} & \req{8.1}{\crm}{I}{S}{b} \\ \hline
+			\req{9.1}{\crh}{O}{O}{b} & \\ \hline
+			\req{10.2}{\crw}{M}{I}{a} & \req{10.1}{\cwm}{I}{M}{a} \\ \hline
+			\req{11.1}{\crm}{I}{S}{a} & \req{11.2}{\crr}{M}{O}{a} \\ \hline
+			\req{12.2}{\crw}{O}{I}{b} & \req{12.1}{\cwh}{S}{M}{b} \\ \hline
+		\end{tabular}
+	\end{center}
+
+	\section*{Questão 05}
+	Para tal questão toma-se como base a ideia de que a Barreira deve impor dependência (sequência ordenada obrigatória) entre trechos de código (fases do programa) paralelos.
+
+	A implementação de uma Barreira ocorre via um \textbf{Contador}. No entanto, incrementa-se uma variável compartilhada e, portanto, tal incremento deve ser \textbf{atômico}.
+	É importante considerar que, em MIPS32, os parâmetros são enviados pelos registradores (inciando de \$a0). O código desenvolvido é o exposto abaixo:
+
+	\begin{center}
+		\lstinputlisting{../barreira.s}
+	\end{center}
 
 	\newpage
-	\section*{Referências}
+		\section*{Referências}
 	\addcontentsline{toc}{section}{Referências}
 	\flushleft
 
-		\bibliography{referencias}
+	\bibliography{referencias}
 
+	\newpage
+	\begin{appendices}
+		\includepdf[pages=-,scale=.9,pagecommand={\section*{Execução do Algoritmo - Tomasulo com Especulação}},linktodoc=true]{tomasulo_especulacao}
+
+	\end{appendices}
 
 \end{document}

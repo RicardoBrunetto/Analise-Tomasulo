@@ -9,6 +9,10 @@
 \usepackage{subfigure} % pra inserir várias figuras no mesmo ambiente
 \usepackage{longtable} % para inserir tabelas extensas sem serem quebradas
 \usepackage{multirow} % pra permitir mescla de linhas na tabela
+\usepackage{pdfpages}
+\usepackage[titletoc,toc,page]{appendix}
+\renewcommand{\appendixtocname}{Ap�ndices}
+\renewcommand{\appendixpagename}{Ap�ndices}
 %\usepackage{helvet} 			%fonte Helvetica
 %\renewcommand{\familydefault}{\sfdefault}				%definir fonte sem serifa como
 % padrão
@@ -87,3 +91,48 @@
 
 % this is needed for forms and links within the text
 \usepackage{hyperref}
+\newcommand{\Z}{\mathbb Z}
+
+\newenvironment{query} %% APPROACH 2
+ {\begin{minipage}{4cm}\centering}
+ {\end{minipage}}
+
+ \newlength\mylength
+ \setlength\mylength{\dimexpr.5\columnwidth-2\tabcolsep-0.5\arrayrulewidth\relax}
+
+ \newcommand{\crm}{read\_miss}
+ \newcommand{\cwm}{write\_miss}
+ \newcommand{\crh}{read\_hit}
+ \newcommand{\cwh}{write\_hit}
+ \newcommand{\crr}{REQ\_read}
+ \newcommand{\crw}{REQ\_write}
+
+ \newcommand{\req}[5]{[#1]: #2 | #3 $\rightarrow$ #4 | $L_#5$}
+%
+% \newlength\q
+% \setlength\q{\dimexpr .5\textwidth -2\tabcolsep}
+%
+% \newcounter{CicloCounter}
+% \begin{table}[h]
+%   \centering
+%   \caption{Estações de Reserva - Ciclo \theCicloCounter}
+%   \begin{tabular}{|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|p{\q}|}
+%     \hline
+%     \textbf{ER}     & \textbf{Busy} & \textbf{Op} & \textbf{Qj} & \textbf{Vj} & \textbf{Qk} & \multicolumn{1}{c|}{\textbf{Vk}} & \multicolumn{1}{c|}{\textbf{A}} \\ \hline
+%     \textit{add1}   &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{add2}   &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{add3}   &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{mul1}   &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{mul2}   &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{load1}  &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{load2}  &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{load3}  &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{load4}  &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{load5}  &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{store1} &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{store2} &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{store3} &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{store4} &               &             &             &             &             &                                  &                                 \\ \hline
+%     \textit{store5} &               &             &             &             &             &                                  &                                 \\ \hline
+%   \end{tabular}
+% \end{table}
