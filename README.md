@@ -5,7 +5,7 @@ Este trabalho foi desenvolvido para a disciplina de Arquitetura e Organização 
 Segunda prova. As questões respondidas no relatório foram solicitadas pelo Prof. Dr. Anderson Faustino.
 
 ## Especificações Tecnológicas
-Todo o programa foi escrito em Latex. O `makefile` local pode ser perfeitamente utilizado, visto que não há dependências externas que requeiram complexidade.
+Todo o relatório foi escrito em Latex. O `makefile` local pode ser perfeitamente utilizado, visto que não há dependências externas que requeiram complexidade.
 
 ## Implementação
 O relatório está disponível [aqui](Documentação/Documento.pdf).
